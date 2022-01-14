@@ -19,11 +19,9 @@ const Dashboard: NextPage = () => {
 }
 
 // eslint-disable-next-line @next/next/no-typos
-export const GetServerSideProps = withSSRAuth(async (ctx) => {
+export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupApiClient(ctx);
   const response = await apiClient.get('/me');
-
-  console.log(response.data)
 
   return {
     props: {},
