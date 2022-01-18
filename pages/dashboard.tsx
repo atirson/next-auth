@@ -1,11 +1,12 @@
-import { NextPage } from "next";
 import { useContext, useEffect } from "react";
+import { Can } from "../components/Can";
 import { AuthContext } from "../contexts/AuthContext";
+import { useCan } from "../hooks/useCan";
 import { setupApiClient } from "../services/api";
 import { api } from "../services/apiClient";
 import { withSSRAuth } from "../utils/withSSRAuth";
 
-const Dashboard: NextPage = () => {
+export default function Dashboard() {
   const {user} = useContext(AuthContext);
 
   useEffect(() => {
@@ -14,11 +15,18 @@ const Dashboard: NextPage = () => {
   }, [])
 
   return (
-    <h1>Dashboard, {user.email}</h1>
+    <>
+      <h1>Dashboard, {user.email}</h1>
+
+      <Can permissions={['metrics.list']}>
+        <p>You can see metrics</p>
+      </Can>
+      
+    </>
+    
   )
 }
 
-// eslint-disable-next-line @next/next/no-typos
 export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupApiClient(ctx);
   const response = await apiClient.get('/me');
@@ -27,5 +35,3 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
     props: {},
   }
 })
-
-export default Dashboard
